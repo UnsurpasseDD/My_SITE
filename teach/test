@@ -1,0 +1,30 @@
+<header class="container-fluid">
+    <div class="container">
+        <div class="row">
+            <div class="col-4">
+                <h1><a href="/"> My site</h1>
+            </div>
+            <nav class="col-8">
+                <ul>
+                  <li></i><a href="#"><i class='bx bxs-home' ></i>Главная</a></li>
+                  <li></i><a href="#"><i class='bx bxs-bowl-hot' ></i>Услуги</a></li>
+                  <li>
+                    <a href="#"><i class='bx bxs-user'></i>Кабинет</a>
+                  <ul>
+                    <li>
+                      <a href="#">Админ панель</a>
+                    </li>
+                    <li><a href="#">Выход</a></li>
+                  </ul>
+                  </li>
+                  <li><a href="#"><i class='bx bxs-phone' ></i>О нас</a></li>
+                </ul>
+            </nav>  
+        </div>
+    </div>
+</header>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  </body>
+</html>
