@@ -290,3 +290,12 @@ form div.err p {
 .posts .post .del{
   color: red;
 }
+
+/* .add-post form div{
+  margin: 2rem 0;
+}
+ */
+
+ .posts .post{
+  margin-top: 15px;
+ }

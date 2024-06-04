@@ -27,21 +27,26 @@
         
         <div class="posts col-9">
             <div class="row title-table">
-                <h2>Управление категориями</h2>
-                <div class="col-1">ID</div>
-                <div class="col-5">Название</div>
-                <div class="col-2">описание</div>
-                <div class="col-4">Управление</div>
+                <h2>Обновление категории</h2>
             </div>
-            <?php foreach ($topics as $key => $topic): ?>
-            <div class="row post">
-                <div class="id col-1"><?=$key + 1;?></div>
-                <div class="title col-5"><?=$topic['name']; ?></div>
-                <div class="author col-2"><?=$topic['description']; ?></div>
-                <div class="red col-2"><a href="edit.php?id=<?=$topic['id'];?>">edit</a></div>
-                <div class="del col-2"><a href="index.php?del_id=<?=$topic['id']; ?>">delete</a></div>
+            <div class="row add-post">
+                <div class="mb-3 col-12 col-md-4 err">
+                <p><?=$errMsg?></p>
+                </div>
+                <form action="edit.php" method="post">
+                <input  name="id" value="<?=$id;?>" type="hidden">
+                    <div class="col">
+                        <input  name="name" value="<?=$name;?>" type="text" class="form-control" placeholder="Category" aria-label="Название категории">
+                    </div>
+                    <div class="col">
+                        <label for="content" class="form-label">Описание категории</label>
+                        <textarea name="description"  class="form-control" id="content" rows="3"><?=$description;?></textarea>  
+                    </div>
+                    <div class="col-12">
+                        <button name="topic-edit" class="btn btn-primary" type="submit">Обновить</button>
+                    </div>
+                </form>
             </div>
-            <?php endforeach; ?>
         </div>
     </div>
 </div>

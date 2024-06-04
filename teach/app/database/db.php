@@ -8,6 +8,7 @@ function tt($value){
     echo'<pre>';
     print_r($value);
     echo'<pre>';
+    exit();
 }
 // проверка выполнения запроса к БД
 function dbCheckError($query){
@@ -25,16 +26,16 @@ function selectALL($table, $params = []){
     $sql = "SELECT * FROM $table";
     if(!empty($params)){
         $i = 0;
-        foreach($params as $key => $value){
+        foreach ($params as $key => $value){
             if (!is_numeric($value)){
-                $value = "'" . $value . "'";
+                $value = "'".$value."'";
             }
-            if($i === 0){
-                $sql = $sql . " WHERE $key = $value";
+            if ($i === 0){
+                $sql = $sql . " WHERE $key=$value";
             }else{
-                $sql = $sql . " AND $key = $value";
+                $sql = $sql . " AND $key=$value";
             }
-            $i ++;
+            $i++;
         }
     }
    
@@ -54,16 +55,16 @@ function selectOne($table, $params = []){
     $sql = "SELECT * FROM $table";
     if(!empty($params)){
         $i = 0;
-        foreach($params as $key => $value){
+        foreach ($params as $key => $value){
             if (!is_numeric($value)){
-                $value = "'" . $value . "'";
+                $value = "'".$value."'";
             }
-            if($i === 0){
-                $sql = $sql . " WHERE $key = $value";
+            if ($i === 0){
+                $sql = $sql . " WHERE $key=$value";
             }else{
-                $sql = $sql . " AND $key = $value";
+                $sql = $sql . " AND $key=$value";
             }
-            $i ++;
+            $i++;
         }
     }
     // $sql = $sql . " LIMIT 1";
@@ -117,7 +118,7 @@ function update($table, $id, $params){
         $i++;
     }
 
-    $sql = "UPDATE $table SET $str WHERE id = $id";
+    $sql = "UPDATE $table SET $str WHERE id =". $id;
     // tt($sql);
     // exit();
 
@@ -131,7 +132,7 @@ function update($table, $id, $params){
 function delete($table, $id, ){
     global $pdo;
     
-    $sql = "DELETE FROM $table WHERE id = $id";
+    $sql = "DELETE FROM $table WHERE id =". $id;
 
     $query = $pdo->prepare($sql);
     $query->execute();

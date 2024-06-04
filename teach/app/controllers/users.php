@@ -50,7 +50,6 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['button-reg'])){
     }
     //     $last_row = selectOne('users', ['id' => $id]);
 }else{
-    echo 'GET';
     $login = '';
     $email = '';
 }

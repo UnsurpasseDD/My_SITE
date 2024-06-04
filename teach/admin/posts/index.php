@@ -22,26 +22,7 @@
 ?>
 
 <div class="container">
-    <div class="row">
-        <div class="sidebar col-3">
-            <ul>
-                <li> 
-                    <a href="#">Записи</a>
-                </li>
-                <li> 
-                    <a href="#">Пользователи</a>
-                </li>
-                <li> 
-                    <a href="#">Категории</a>
-                </li>
-                <li> 
-                    <a href="create.html">Добавить пост</a>
-                </li>
-                <li> 
-                    <a href="index.html">Manage Posts</a>
-                </li>
-            </ul>
-        </div>
+    <?php include("../../app/Include/sidebar-admin.php"); ?>
         
         <div class="posts col-9">
             <div class="row title-table">
