@@ -1,7 +1,7 @@
 <?php
-include("app/database/db.php");
+include SITE_ROOT . "/app/database/db.php";
 
-$errMsg = '';
+$errMsg = [''];
 
 function userAuth($user){
     $_SESSION['id'] = $user['id'];
@@ -18,6 +18,8 @@ function userAuth($user){
 
 // Код для формы регистрации
 if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['button-reg'])){
+    
+    
     $admin = 0;
     $login = trim($_POST['login']);
     $email = trim($_POST['email']);
@@ -26,15 +28,15 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['button-reg'])){
 
 
     if ($login === '' || $email === '' || $passF === ''){
-        $errMsg = 'Не все поля заполнены!';
+        array_push($errMsg,'Не все поля заполнены!');
     }elseif(mb_strlen($login, 'UTF8') < 2){
-        $errMsg = "Придумайте длиннее логин";
+        array_push($errMsg,'Придумайте длиннее логин');
     }elseif($passF !== $passS){
-        $errMsg = 'Пароли не совпадают';
+       array_push($errMsg,'Пароли не совпадают');
     }else{
         $existence = selectOne('users', ['email' => $email]);
         if (!empty($existence['email']) && $existence['email'] === $email){
-            $errMsg = " Такая почта уже занята";
+            array_push($errMsg,'Такая почта уже занята');
         }else{$pass = password_hash($passF, PASSWORD_DEFAULT);
             $post = [
                 'admin' => $admin,
@@ -63,15 +65,56 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['button-log'])){
     $pass = trim($_POST['password']);
     
     if ($email === '' || $pass === ''){
-        $errMsg = 'Не все поля заполнены!';
+        array_push($errMsg,'Не все поля заполнены!');
     }else{
         $existence = selectOne('users', ['email' => $email]);
         if($existence && password_verify($pass, $existence['password'])){
             userAuth($existence);     
         }else{
-            $errMsg = 'Почта или пароль введены неверно!';
+            array_push($errMsg,'Почта или пароль введены неверно!');
         }
     }
 }else{
+    $email = '';
+}
+
+
+// Код добавление пользователя в админке
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create-user'])){
+    
+    
+    $admin = 0;
+    $login = trim($_POST['login']);
+    $email = trim($_POST['email']);
+    $passS = trim($_POST['second-pass']);
+    $passF = trim($_POST['first-pass']);
+
+    if ($login === '' || $email === '' || $passF === ''){
+        $errMsg = 'Не все поля заполнены!';
+    }elseif(mb_strlen($login, 'UTF8') < 2){
+        $errMsg = "Придумайте длиннее логин";
+    }elseif($passF !== $passS){
+        $errMsg = 'Пароли не совпадают';
+    }else{
+        $existence = selectOne('users', ['email' => $email]);
+        if (!empty($existence['email']) && $existence['email'] === $email){
+            $errMsg = " Такая почта уже занята";
+        }else{$pass = password_hash($passF, PASSWORD_DEFAULT);
+            if (isset($_POST["admin"])) $admin = 1;
+            $user = [
+                'admin' => $admin,
+                'username' => $login,
+                'email' => $email,
+                'password' => $pass
+            ];
+            $id = insert('users', $user);
+            $user = selectOne('users', ['id' => $id]);
+            userAuth($user);
+              
+        }
+    }
+    //     $last_row = selectOne('users', ['id' => $id]);
+}else{
+    $login = '';
     $email = '';
 }

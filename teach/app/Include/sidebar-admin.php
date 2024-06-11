@@ -3,15 +3,6 @@
         <div class="sidebar col-3">
         <ul>
                 <li> 
-                    <a href="#">Записи</a>
-                </li>
-                <li> 
-                    <a href="#">Пользователи</a>
-                </li>
-                <li> 
-                    <a href="#">Категории</a>
-                </li>
-                <li> 
                     <a href="../posts/create.php">Добавить пост</a>
                 </li>
                 <li> 

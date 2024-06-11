@@ -1,6 +1,6 @@
 <?php session_start();
-      include('../../path.php');
-      include("../../app/controllers/topics.php");
+      include "../../path.php";
+      include "../../app/controllers/topics.php";
 ?>
 
 <!doctype html>

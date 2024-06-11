@@ -299,3 +299,18 @@ form div.err p {
  .posts .post{
   margin-top: 15px;
  }
+
+ /* 
+  Error msg
+*/
+.add-post .err {
+  padding: 1rem 0;
+  color: red;
+}
+
+.add-post .err ul{
+  list-style: none;
+  color: #A52A2A;
+  padding-left: 10px;
+  font-weight: 500;
+}

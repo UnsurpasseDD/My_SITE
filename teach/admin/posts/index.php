@@ -1,5 +1,6 @@
-<?php session_start();
+<?php 
       include('../../path.php');
+      include("../../app/controllers/posts.php");
 ?>
 
 <!doctype html>
@@ -28,17 +29,24 @@
             <div class="row title-table">
                 <h2>Управление постами</h2>
                 <div class="col-1">ID</div>
-                <div class="col-5">Название</div>
+                <div class="col-3">Название</div>
                 <div class="col-2">Автор</div>
-                <div class="col-4">Управление</div>
+                <div class="col-6">Управление</div>
             </div>
+            <?php foreach ($postsAdm as $key => $post): ?>
             <div class="row post">
-                <div class="id col-1">1</div>
-                <div class="title col-5">Какая-то статья</div>
-                <div class="author col-2">Админ</div>
-                <div class="red col-2"><a href="#">edit</a></div>
-                <div class="del col-2"><a href="#">delete</a></div>
+                <div class="id col-1"><?=$key + 1; ?></div>
+                <div class="title col-3"><?=$post['title']; ?></div>
+                <div class="author col-2"><?=$post['username']; ?></div>
+                <div class="red col-2"><a href="edit.php?id=<?=$post['id'];?>">edit</a></div>
+                <div class="del col-2"><a href="index.php?del_id=<?=$post['id']; ?>">delete</a></div>
+                <?php if($post['status']): ?>
+                  <div class="status col-2"><a href="edit.php?publish=0&pub_id=<?=$post['id']; ?>">снять с пуб.</a></div>
+                <?php else: ?>
+                  <div class="status col-2"><a href="edit.php?publish=1&pub_id=<?=$post['id']; ?>">Опубликовать</a></div>
+                <?php endif; ?>
             </div>
+            <?php endforeach; ?>
         </div>
     </div>
 </div>
