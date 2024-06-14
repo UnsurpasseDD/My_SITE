@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['add_post'])){
 }
 
 
-// Редактор категории
+// Редактор posts
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])){
     $id = $_GET['id'];
     $post = selectOne('posts', ['id'=> $_GET['id']]);
@@ -87,7 +87,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])){
     $publish = $post['status'];
 }
 
-// доделать 23:00 время видео
+
 
 if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['edit_post'])){
     
@@ -123,10 +123,6 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['edit_post'])){
     }elseif(mb_strlen($title, 'UTF8') < 7){
         array_push($errMsg,'Придумайте длиннее название');
     }else{
-        $existence = selectOne('posts', ['title' => $title]);
-        if (!empty($existence['title']) && $existence['title'] === $title){
-            array_push($errMsg,'Такое название поста уже есть');
-        }else{
                 $post = [
                     'id_user' => $_SESSION['id'],
                     'title' => $title,
@@ -140,8 +136,6 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['edit_post'])){
             // $post = selectOne('posts', ['id' => $id]);
                 header('location: ' . BASE_URL . 'admin/posts/index.php');
             }
-    }
-    //     $last_row = selectOne('users', ['id' => $id]);
 }else{
     $title = '';
     $content = '';

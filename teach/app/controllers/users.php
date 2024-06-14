@@ -1,7 +1,7 @@
 <?php
 include SITE_ROOT . "/app/database/db.php";
 
-$errMsg = [''];
+$errMsg = [];
 
 function userAuth($user){
     $_SESSION['id'] = $user['id'];
@@ -14,6 +14,9 @@ function userAuth($user){
          header('location: '. BASE_URL);
     }    
 }
+
+$users = selectALL('users');
+
 
 
 // Код для формы регистрации
@@ -38,13 +41,13 @@ if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['button-reg'])){
         if (!empty($existence['email']) && $existence['email'] === $email){
             array_push($errMsg,'Такая почта уже занята');
         }else{$pass = password_hash($passF, PASSWORD_DEFAULT);
-            $post = [
+            $user = [
                 'admin' => $admin,
                 'username' => $login,
                 'email' => $email,
                 'password' => $pass
             ];
-            $id = insert('users', $post);
+            $id = insert('users', $user);
             $user = selectOne('users', ['id' => $id]);
             userAuth($user);
               
@@ -117,4 +120,73 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['create-user'])){
 }else{
     $login = '';
     $email = '';
+}
+
+
+// Редактор users
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['edit_id'])){
+    $id = $_GET['edit_id'];
+    $user = selectOne('users', ['id'=> $_GET['edit_id']]);
+    
+    $id = $user['id'];
+    $admin = $user['admin'];
+    $username = $user['username'];
+    $email = $user['email'];
+    // $password = $user['password'];
+    
+}
+
+
+
+if ($_SERVER['REQUEST_METHOD'] ==='POST' && isset($_POST['update-user'])){
+
+    $id = $_POST['id'];
+    $email = trim($_POST['email']);
+    $login = trim($_POST['login']);
+    $passF = trim($_POST['first-pass']);
+    $passS = trim($_POST['second-pass']);
+    $admin = isset($_POST['admin']) ? 1 : 0;  
+
+    if ($email === '' || $login === '' ){
+        array_push($errMsg,'Не все поля заполнены!');
+    }elseif(mb_strlen($login, 'UTF8') < 2){
+        array_push($errMsg,'Login должен быть больше 2-х символов');
+    }elseif($passF !== $passS){
+        $errMsg = 'Пароли не совпадают';
+    }else{$pass = password_hash($passF, PASSWORD_DEFAULT);
+        if (isset($_POST["admin"])) $admin = 1;
+        $user = [
+            'admin' => $admin,
+            'username' => $login,
+            'email' => $email,
+            'password' => $pass
+        ];
+                $id = $_POST['id'];
+                $user = update('users', $id, $user);
+            // $post = selectOne('posts', ['id' => $id]);
+                header('location: ' . BASE_URL . 'admin/users/index.php');
+            }
+}else{
+        $login = '';
+        $email = '';
+}
+    //     $last_row = selectOne('users', ['id' => $id]);
+
+// if ($_SERVER['REQUEST_METHOD'] ==='GET' && isset($_GET['pub_id'])){
+//     $id = $_GET['pub_id'];
+//     $publish = $_GET['publish'];
+
+//     $postid = update('posts', $id, ['status' => $publish]);
+
+//     header('location: ' . BASE_URL . 'admin/posts/index.php');
+//     exit();
+// }
+
+
+
+// Удаление категории
+if ($_SERVER['REQUEST_METHOD'] ==='GET' && isset($_GET['delete_id'])){
+    $id = $_GET['delete_id'];
+    delete('users', $id);
+    header('location: ' . BASE_URL . 'admin/users/index.php');
 }

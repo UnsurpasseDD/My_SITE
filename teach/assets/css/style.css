@@ -149,6 +149,7 @@ SLIDER
   text-decoration: underline;
 }
 
+
 /* 
     MAIN
 */
@@ -159,6 +160,7 @@ SLIDER
 
 .main-content .post {
   margin-bottom: 30px;
+
 }
 
 .main-content .post_text {
@@ -180,7 +182,11 @@ SLIDER
 }
 
 .main-content .post .img {
-  height: 100%;
+  height: auto;
+  max-width: 100%;
+  padding: .25rem;
+  border:  1px solid #dee2de;
+  border-radius: .25rem;
 }
 
 /* 
