@@ -2,13 +2,12 @@
   include "path.php";
   include "app/controllers/topics.php";
 
-  $page = isset($_GET['page']) ? $_GET['page'] :1;
-  $limit = 3;
-  $offset = $limit * ($page - 1);
-  $total_pages = round(countRow('posts') / $limit, 0);
-
-  $posts = selectAllFromPostsWithUsersOnIndex('posts', 'users', $limit, $offset);
+  
+  $posts = selectALL('posts', ['id_topic' => $_GET['id']]);
   $topTopic = selectTopTopicFromPostsOnIndex('posts');
+  $category = selectOne('topics', ['id' => $_GET['id']]);
+  
+  
 ?>
 <!doctype html>
 <html lang="en">
@@ -30,31 +29,7 @@
 ?>
 
 <!-- блок карусели START -->
-<div class="container">
-  <div class="row">
-    <h2 class="slider-title">Топ публикаций</h2>
-  </div>
-    <div id="carouselExampleCaptions" class="carousel slide">  
-    <div class="carousel-indicators">
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-        <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-      </div>
-      
-      <div class="carousel-inner">
-        <?php foreach ($topTopic as $key => $post): ?>
-            <?php if ($key == 0):?>
-            <div class="carousel-item active">
-            <?php else:?>
-              <div class="carousel-item">
-            <?php endif;?>
-                <img src="<?=BASE_URL . 'assets/img/posts/' . $post['img'] ?>" alt="<?=$post['title']?>" class="d-block w-100">
-                <div class="carousel-caption-hack carousel-caption d-none d-md-block">
-                  <h5><a href="<?=BASE_URL . 'single.php?post=' . $post['id']; ?>"><?=substr($post['title'], 0,40 ) . '...'?></a></h5>
-                </div>
-            </div>
-        <?php endforeach;?>
-      </div>
+
       <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
@@ -72,7 +47,7 @@
   <div class="content row">
     <!-- main content -->
     <div class="main-content col-md-9 col-12">
-        <h2>Последние публиции</h2>
+        <h2>Статьи с раздела <strong><?=$category['name'] ?></strong></h2>
         <?php foreach ($posts as $post): ?>
         <div class="post row">
           <div class="img col-12 col-md-4">
@@ -82,7 +57,7 @@
               <h3>
                 <a href="<?=BASE_URL . 'single.php?post=' . $post['id']; ?>"><?=substr($post['title'], 0,40 ) . '...'?></a>
               </h3>
-              <i class='bx bx-edit-alt' ><?=$post['username']; ?></i>
+              <i class='bx bx-edit-alt' ><?=$post['id_user']; ?></i>
               <i class='bx bxs-calendar'><?=$post['created_date']; ?></i>
               <p class="preview-text">
                   <?=mb_substr($post['content'], 0, 150, 'UTF-8') . '...' ?>
@@ -90,10 +65,8 @@
           </div>
         </div>
         <?php endforeach; ?>
-        <!-- pagination -->
-        <?php include("app/Include/pagination.php") ?>
+        <?php include('app/Include/pagination.php'); ?>
     </div>
-  
     <!-- sibebar Content -->
     <div class="sidebar col-md-3 col-12">
         <div class="section search">

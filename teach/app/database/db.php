@@ -159,9 +159,9 @@ function selectAllFromPostsWithUsers($table1, $table2){
 
 
 // Выборка записекй (pots) с автором на главную
-function selectAllFromPostsWithUsersOnIndex($table1, $table2){
+function selectAllFromPostsWithUsersOnIndex($table1, $table2, $limit, $offset){
     global $pdo;
-    $sql = "SELECT p.*, u.username FROM $table1 AS p JOIN $table2 AS u ON p.id_user = u.id WHERE p.status=1";
+    $sql = "SELECT p.*, u.username FROM $table1 AS p JOIN $table2 AS u ON p.id_user = u.id WHERE p.status=1 LIMIT $limit OFFSET $offset";
     $query = $pdo->prepare($sql);
     $query->execute();
     dbCheckError($query);
@@ -169,7 +169,7 @@ function selectAllFromPostsWithUsersOnIndex($table1, $table2){
 }
 
 
-// Выборка записекй (pots) с автором на главную
+// Выборка записекй (posts) с автором на главную в топ
 function selectTopTopicFromPostsOnIndex($table1){
     global $pdo;
     $sql = "SELECT * FROM $table1 WHERE id_topic = 13";
@@ -177,4 +177,47 @@ function selectTopTopicFromPostsOnIndex($table1){
     $query->execute();
     dbCheckError($query);
     return $query->fetchAll();
+}
+
+
+
+// Поиск по заголовкам и содержимому
+function searchInTitleAndContent($text, $table1, $table2){
+    $text = trim(strip_tags(stripcslashes(htmlspecialchars($text))));
+    global $pdo;
+    //запрос в бд
+    $sql = "SELECT 
+    p.*, u.username 
+    FROM $table1 AS p 
+    JOIN $table2 AS u 
+    ON p.id_user = u.id 
+    WHERE p.status=1
+    AND p.title LIKE '%$text%' OR p.content LIKE '%$text%'";
+    
+    $query = $pdo->prepare($sql);
+    $query->execute();
+    dbCheckError($query);
+    return $query->fetchAll();
+}
+
+
+// Выборка запись (pots) с автором на single.php
+function selectPostFromPostsWithUsersOnSingle($table1, $table2, $id){
+    global $pdo;
+    $sql = "SELECT p.*, u.username FROM $table1 AS p JOIN $table2 AS u ON p.id_user = u.id WHERE p.id=$id";
+    $query = $pdo->prepare($sql);
+    $query->execute();
+    dbCheckError($query);
+    return $query->fetch();
+}
+
+
+// Пагинация
+function countRow($table){
+    global $pdo;
+    $sql = "SELECT COUNT(*)  FROM $table WHERE status=1";
+    $query = $pdo->prepare($sql);
+    $query->execute();
+    dbCheckError($query);
+    return $query->fetchColumn();
 }

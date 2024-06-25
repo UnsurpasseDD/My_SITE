@@ -1,9 +1,11 @@
-<?php include("path.php");
-      include "app/controllers/topics.php";
-      $post = selectPostFromPostsWithUsersOnSingle('posts', 'users', $_GET['post']);
-      
+<?php  
+  include "path.php";
+  include SITE_ROOT . "/app/database/db.php";
+  if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['search-term'])){
+        $posts = searchInTitleAndContent($_POST['search-term'], 'posts', 'users');
+  }
+  
 ?>
-
 <!doctype html>
 <html lang="ru">
   <head>
@@ -18,54 +20,36 @@
     <link rel="stylesheet" href="assets/css/style.css">
   </head>
 <body>
+
 <?php
-include ('app/Include/header.php');
+ include('app/Include/header.php');
 ?>
+
 
 <!-- block main -->
 <main>
 <div class="container">
   <div class="content row">
     <!-- main content -->
-    <div class="single_main-content col-md-9 col-12">
-        <h2><?php echo $post['title']; ?></h2>
-        
-
-        <div class="single_post row">
-          <div class="img col-12">
+    <div class="main-content col-12">
+        <h2>Результаты поиска</h2>
+        <?php foreach ($posts as $post): ?>
+        <div class="post row">
+          <div class="img col-12 col-md-4">
             <img src="<?=BASE_URL . 'assets/img/posts/' . $post['img'] ?>" alt="<?=$post['title']?>" class="img-thumbnail">
           </div>
-          <div class="info">
-            <i class='bx bx-edit-alt' ><?=$post['username'];?></i>
-            <i class='bx bxs-calendar'><?=$post['created_date']; ?></i>
+          <div class="post_text col-12  col-md-8">
+              <h3>
+                <a href="<?=BASE_URL . 'single.php?post=' . $post['id']; ?>"><?=substr($post['title'], 0,40 ) . '...'?></a>
+              </h3>
+              <i class='bx bx-edit-alt' ><?=$post['username']; ?></i>
+              <i class='bx bxs-calendar'><?=$post['created_date']; ?></i>
+              <p class="preview-text">
+                  <?=mb_substr($post['content'], 0, 150, 'UTF-8') . '...' ?>
+              </p>
           </div>
-          <div class="single_post_text col-12">
-          <?=$post['content'];?>
-          </div>
-          <!-- include comment -->
-          <?php include ('app/Include/comment.php') ?>
         </div>
-    </div>
-
-    <!-- sibebar Content -->
-
-    <div class="sidebar col-md-3 col-12">
-        <div class="section search">
-          <h3>Поиск</h3>
-          <form action="index.html" method="post">
-            <input type="text" name="search-term" class="text-input" placeholder="Поиск...">
-          </form>
-        </div>
-        
-        <div class="section topics">
-          <h3>Категории</h3>
-          <ul>
-              <?php foreach ($topics as $key => $topic): ?>
-                <li><a href="<?=BASE_URL . 'category.php?id=' . $topic['id'];?>"><?=$topic['name']; ?></a></li>
-              <?php endforeach; ?>
-          </ul>
-        </div>
-
+        <?php endforeach; ?>
     </div>
 </div>
 </main>
